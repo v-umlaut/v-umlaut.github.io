@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="We revisit the problem of estimating the fundamental matrix of a pair of perspective cameras, and provide the first linear solver for a special minimal configuration with 7 or 5 points.">
+  <meta name="keywords" content="Fundamental matrix, Epipolar geometry, Minimal solvers, 7-point algorithm, 5-point algorithm, Computer vision">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>v-umlaut: Linear Fundamental Matrix Estimation from 7 or 5 Points</title>
+
+  <meta property="og:title" content="Linear Fundamental Matrix Estimation from 7 or 5 Points" />
+  <meta property="og:description"
+    content="We revisit the problem of estimating the fundamental matrix, and provide the first linear solver for a special minimal configuration with 7 or 5 points." />
+  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:title" content="Linear Fundamental Matrix Estimation from 7 or 5 Points" />
+  <meta property="twitter:description"
+    content="We revisit the problem of estimating the fundamental matrix, and provide the first linear solver for a special minimal configuration with 7 or 5 points." />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <!-- Bulma + FontAwesome via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
+  <style>
+    body {
+      font-family: 'Noto Sans', 'Google Sans', sans-serif;
+    }
+    .publication-title {
+      font-family: 'Google Sans', sans-serif;
+    }
+    .publication-authors {
+      font-family: 'Google Sans', sans-serif;
+    }
+    .publication-links .link-block {
+      margin: 0.25rem;
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-4 publication-title" style="font-size: 2rem;">
+              Linear Fundamental Matrix Estimation from 7 or 5 Points
+            </h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                Taci Ata Kucukpinar,
+              </span>
+              &nbsp;&nbsp;&nbsp;
+              <span class="author-block">
+                Juan Mogollon,
+              </span>
+              &nbsp;&nbsp;&nbsp;
+              <span class="author-block">
+                Joshua Fraser,
+              </span>
+              <br>
+              <span class="author-block">
+                <a href="https://timduff35.github.io/timduff35/">Timothy Duff</a>,
+              </span>
+              &nbsp;&nbsp;&nbsp;
+              <span class="author-block">
+                Kannappan Palaniappan
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors" style="margin-bottom: 10px;">
+              <span class="author-block">University of Missouri &mdash; Columbia</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Paper Link -->
+                <span class="link-block">
+                  <a href="#" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <!-- Code Link -->
+                <span class="link-block">
+                  <a href="https://github.com/CIVA-Lab/v-umlaut"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 1rem;">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width has-text-centered">
+
+          <h2 class="title is-4" style="font-weight: 700;">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              We revisit the problem of estimating the fundamental matrix of a pair of perspective cameras,
+              a cornerstone of geometric computer vision.
+              As is well-known, linear solvers require at least 8 point correspondences,
+              whereas nonlinear minimal solvers require just 7 in the uncalibrated case or 5 in the calibrated case.
+              In this paper, we consider a special case of the 7-point problem where 5 of the points are configured
+              to lie on two lines, which has previously been shown to have a unique solution.
+              As a theoretical contribution, we offer a completely elementary analysis of how this uniqueness
+              manifests in the standard 7-point algorithm.
+              On a practical level, we provide the first linear solver for the minimal problem associated to this
+              special configuration.
+              Additionally, we evaluate a heuristic 5-point fundamental matrix solver based on the construction of
+              virtual midpoints.
+              When combined with early non-minimal fitting, the runtime and accuracy of our solver is competitive
+              with the state-of-the-art on multiple benchmarks.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This webpage template is adapted from
+              <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>,
+              under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
