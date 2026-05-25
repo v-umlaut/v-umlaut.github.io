@@ -20,8 +20,9 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
-  <!-- Bulma via CDN -->
+  <!-- Bulma + FontAwesome via CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 
   <style>
     body {
@@ -32,6 +33,10 @@
     }
     .publication-authors {
       font-family: 'Google Sans', sans-serif;
+    }
+    .publication-links .link-block {
+      margin: 0.25rem;
+      display: inline-block;
     }
   </style>
 </head>
@@ -71,6 +76,31 @@
 
             <div class="is-size-5 publication-authors" style="margin-bottom: 10px;">
               <span class="author-block">University of Missouri</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Paper Link -->
+                <span class="link-block">
+                  <a href="https://openaccess.thecvf.com/content/CVPR2026/papers/Kucukpinar_Linear_Fundamental_Matrix_Estimation_from_7_or_5_Points_CVPR_2026_paper.pdf"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <!-- Supplementary Material Link -->
+                <span class="link-block">
+                  <a href="https://openaccess.thecvf.com/content/CVPR2026/supplemental/Kucukpinar_Linear_Fundamental_Matrix_CVPR_2026_supplemental.pdf"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Supplementary Material</span>
+                  </a>
+                </span>
+              </div>
             </div>
 
             <div class="is-size-5" style="margin-top: 1rem; font-style: italic;">
