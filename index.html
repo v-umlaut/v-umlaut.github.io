@@ -18,7 +18,7 @@
     content="We revisit the problem of estimating the fundamental matrix, and provide the first linear solver for a special minimal configuration with 7 or 5 points." />
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro:400,400i" rel="stylesheet">
 
   <!-- Bulma + FontAwesome via CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -46,6 +46,130 @@
       margin: 0.25rem;
       display: inline-block;
     }
+
+    /* Overview figure. Point colors follow PLMP (Kiehn et al.), Table 1: free point #EE6677,
+       dependent point #66CCEE, dotted lines #BBBBBB, discs with thin black outlines. */
+    .ov-panel {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1.1rem 0.9rem 1rem;
+      background: #f8f9fb;
+      border: 1px solid #eceef2;
+      border-radius: 12px;
+    }
+    .ov-title {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.08rem;
+      color: #363636;
+      margin-bottom: 0.15rem;
+    }
+    .ov-sub {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.35;
+      margin-bottom: 0.55rem;
+    }
+    @media screen and (min-width: 1024px) {
+      .ov-sub {
+        min-height: 2.7em;
+      }
+    }
+    .ov-pair {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      display: block;
+    }
+    .ov-step {
+      font-size: 0.85rem;
+      color: #666;
+      margin: 0.35rem 0 0.5rem;
+      line-height: 1.3;
+    }
+    .ov-step .ov-arrow {
+      display: block;
+      font-size: 1.1rem;
+      color: #8a8a8a;
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+    .ov-out {
+      display: flex;
+      gap: 0.4rem;
+      justify-content: center;
+      margin-bottom: 0.45rem;
+    }
+    .ov-F {
+      font-family: 'Castoro', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1;
+      padding: 0.3rem 0.6rem 0.35rem;
+      border-radius: 7px;
+      background: #363636;
+      color: #fff;
+    }
+    .ov-F.is-light {
+      background: #e4e6ea;
+      color: #363636;
+    }
+    .ov-F sub {
+      font-size: 0.65em;
+      font-style: normal;
+    }
+    .ov-verdict {
+      font-size: 0.98rem;
+      color: #363636;
+    }
+    .ov-note {
+      font-size: 0.8rem;
+      color: #666;
+      line-height: 1.4;
+    }
+    .ov-legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4rem 1.4rem;
+      font-size: 0.85rem;
+      color: #4a4a4a;
+      margin-top: 0.6rem;
+    }
+    .ov-legend svg {
+      vertical-align: -2px;
+      margin-right: 0.35rem;
+    }
+    .ov-card-note {
+      margin-top: 0.15rem;
+    }
+    .ov-refs {
+      margin-top: 0.8rem;
+    }
+    .ov-ref {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.4rem;
+    }
+    .ov-nowrap {
+      white-space: nowrap;
+    }
+
+    /* Venue line under the title */
+    .publication-venue {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.05rem;
+      color: #7a7a7a;
+      letter-spacing: 0.02em;
+      margin: -1rem 0 1.1rem;
+    }
+    .publication-venue .sep {
+      margin: 0 0.45em;
+      color: #b5b5b5;
+    }
   </style>
 </head>
 
@@ -59,6 +183,7 @@
             <h1 class="title is-4 publication-title" style="font-size: 2rem;">
               Linear Fundamental Matrix Estimation from 7 or 5 Points
             </h1>
+            <p class="publication-venue">CVPR 2026<span class="sep" aria-hidden="true">&middot;</span>Oral<span class="sep" aria-hidden="true">&middot;</span>Award Candidate</p>
 
             <div class="is-size-5 publication-authors">
               <span class="author-block">
@@ -140,6 +265,148 @@
 
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Overview figure: 7-point algorithm vs V-Umlaut vs V-Umlaut in RANSAC -->
+  <section class="section" id="overview" style="padding-top: 0.5rem; padding-bottom: 1.5rem;">
+    <div class="container is-max-desktop">
+      <h2 class="is-sr-only">Overview</h2>
+      <div class="columns is-desktop is-variable is-3">
+
+        <!-- 1. Classical 7-point algorithm -->
+        <div class="column">
+          <div class="ov-panel">
+            <h3 class="ov-title">7-point algorithm</h3>
+            <p class="ov-sub">7 correspondences in general position</p>
+            <svg class="ov-pair" viewBox="0 0 300 136" role="img" aria-label="Seven corresponding points in general position in two images">
+              <rect x="6" y="6" width="138" height="108" rx="8" fill="#fff" stroke="#dcdfe4"/>
+              <rect x="156" y="6" width="138" height="108" rx="8" fill="#fff" stroke="#dcdfe4"/>
+              <g stroke="#000" stroke-width="0.9" fill="#EE6677">
+                <circle cx="31" cy="36" r="5"/><circle cx="72" cy="21" r="5"/><circle cx="115" cy="36" r="5"/>
+                <circle cx="35" cy="66" r="5"/><circle cx="86" cy="58" r="5"/><circle cx="125" cy="94" r="5"/>
+                <circle cx="66" cy="102" r="5"/>
+                <circle cx="187" cy="45" r="5"/><circle cx="222" cy="28" r="5"/><circle cx="265" cy="38" r="5"/>
+                <circle cx="197" cy="74" r="5"/><circle cx="238" cy="63" r="5"/><circle cx="277" cy="96" r="5"/>
+                <circle cx="227" cy="98" r="5"/>
+              </g>
+              <text x="75" y="131" text-anchor="middle" font-size="12.5" fill="#666">image 1</text>
+              <text x="225" y="131" text-anchor="middle" font-size="12.5" fill="#666">image 2</text>
+            </svg>
+            <p class="ov-step"><span class="ov-arrow" aria-hidden="true">&darr;</span>det&thinsp;F&nbsp;=&nbsp;0, a cubic</p>
+            <div class="ov-out">
+              <span class="ov-F is-light">F<sub>1</sub></span><span class="ov-F is-light">F<sub>2</sub></span><span class="ov-F is-light">F<sub>3</sub></span>
+            </div>
+            <p class="ov-verdict">up to <strong>3 solutions</strong></p>
+            <p class="ov-note ov-card-note">On a <span class="ov-nowrap">V-Umlaut</span> configuration, two of the three are spurious.</p>
+          </div>
+        </div>
+
+        <!-- 2. V-Umlaut: 5 of the 7 points on two lines through p1 -->
+        <div class="column">
+          <div class="ov-panel">
+            <h3 class="ov-title">V-Umlaut</h3>
+            <p class="ov-sub">5 of the 7 points lie on two lines through one&nbsp;point</p>
+            <svg class="ov-pair" viewBox="0 0 300 136" role="img" aria-label="The V-Umlaut configuration in two images: two lines through one point with a dependent point on each, and two further points">
+              <rect x="6" y="6" width="138" height="108" rx="8" fill="#fff" stroke="#dcdfe4"/>
+              <rect x="156" y="6" width="138" height="108" rx="8" fill="#fff" stroke="#dcdfe4"/>
+              <g transform="translate(0,4)">
+                <g stroke="#BBBBBB" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="0.1 4.4" fill="none">
+                  <path d="M75 96 L36 34 M75 96 L114 34"/>
+                  <path d="M228 92 L190 40 M228 92 L268 30"/>
+                </g>
+                <g stroke="#000" stroke-width="0.9">
+                  <g fill="#66CCEE">
+                    <circle cx="53.5" cy="61.9" r="5"/><circle cx="94.5" cy="65" r="5"/>
+                    <circle cx="209" cy="66" r="5"/><circle cx="246" cy="64.1" r="5"/>
+                  </g>
+                  <g fill="#EE6677">
+                    <circle cx="75" cy="96" r="5"/><circle cx="36" cy="34" r="5"/><circle cx="114" cy="34" r="5"/>
+                    <circle cx="61" cy="18" r="5"/><circle cx="89" cy="18" r="5"/>
+                    <circle cx="228" cy="92" r="5"/><circle cx="190" cy="40" r="5"/><circle cx="268" cy="30" r="5"/>
+                    <circle cx="216" cy="20" r="5"/><circle cx="245" cy="15" r="5"/>
+                  </g>
+                </g>
+              </g>
+              <text x="75" y="131" text-anchor="middle" font-size="12.5" fill="#666">image 1</text>
+              <text x="225" y="131" text-anchor="middle" font-size="12.5" fill="#666">image 2</text>
+            </svg>
+            <p class="ov-step"><span class="ov-arrow" aria-hidden="true">&darr;</span>a linear solve</p>
+            <div class="ov-out">
+              <span class="ov-F">F</span>
+            </div>
+            <p class="ov-verdict"><strong>unique solution</strong></p>
+            <p class="ov-note ov-card-note">PLMP&nbsp;<a href="#ov-ref-1">[1]</a> proved uniqueness without a solver.
+              <span class="ov-nowrap">V-Umlaut</span> is the first linear solver.</p>
+          </div>
+        </div>
+
+        <!-- 3. V-Umlaut in RANSAC: virtual midpoints from any 5-point sample (heuristic) -->
+        <div class="column">
+          <div class="ov-panel">
+            <h3 class="ov-title">V-Umlaut in RANSAC</h3>
+            <p class="ov-sub">any 5 general points from a RANSAC&nbsp;sample</p>
+            <svg class="ov-pair" viewBox="0 0 300 136" role="img" aria-label="Five general points in two images with two virtual midpoints on two segments that share one of the points">
+              <rect x="6" y="6" width="138" height="108" rx="8" fill="#fff" stroke="#dcdfe4"/>
+              <rect x="156" y="6" width="138" height="108" rx="8" fill="#fff" stroke="#dcdfe4"/>
+              <g transform="translate(0,4)">
+                <g stroke="#BBBBBB" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="0.1 4.4" fill="none">
+                  <path d="M46 92 L30 32 M46 92 L116 44"/>
+                  <path d="M202 90 L186 36 M202 90 L270 40"/>
+                </g>
+                <g stroke="#000" stroke-width="0.9">
+                  <g fill="#EE6677">
+                    <circle cx="46" cy="92" r="5"/><circle cx="30" cy="32" r="5"/><circle cx="116" cy="44" r="5"/>
+                    <circle cx="76" cy="20" r="5"/><circle cx="104" cy="92" r="5"/>
+                    <circle cx="202" cy="90" r="5"/><circle cx="186" cy="36" r="5"/><circle cx="270" cy="40" r="5"/>
+                    <circle cx="230" cy="22" r="5"/><circle cx="258" cy="88" r="5"/>
+                  </g>
+                  <g fill="#66CCEE">
+                    <circle cx="38" cy="62" r="5"/><circle cx="81" cy="68" r="5"/>
+                    <circle cx="194" cy="63" r="5"/><circle cx="236" cy="65" r="5"/>
+                  </g>
+                  <g fill="#fff">
+                    <circle cx="38" cy="62" r="2.6"/><circle cx="81" cy="68" r="2.6"/>
+                    <circle cx="194" cy="63" r="2.6"/><circle cx="236" cy="65" r="2.6"/>
+                  </g>
+                </g>
+              </g>
+              <text x="75" y="131" text-anchor="middle" font-size="12.5" fill="#666">image 1</text>
+              <text x="225" y="131" text-anchor="middle" font-size="12.5" fill="#666">image 2</text>
+            </svg>
+            <p class="ov-step"><span class="ov-arrow" aria-hidden="true">&darr;</span>V-Umlaut, once per sample</p>
+            <div class="ov-out">
+              <span class="ov-F">F</span>
+            </div>
+            <p class="ov-verdict"><strong>5 general points<br>+ 2 virtual midpoints</strong></p>
+            <p class="ov-note ov-card-note">Midpoints are predicted as correspondences, as virtual
+              points&nbsp;<a href="#ov-ref-2">[2]</a>. This approximation forms a <span class="ov-nowrap">V-Umlaut</span> from any
+              5 general points. Within RANSAC, this approach is competitive with the <span class="ov-nowrap">7-point</span> algorithm and faster.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="ov-legend">
+        <span><svg aria-hidden="true" width="13" height="13" viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5" fill="#EE6677" stroke="#000" stroke-width="0.9"/></svg>free point</span>
+        <span><svg aria-hidden="true" width="13" height="13" viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5" fill="#66CCEE" stroke="#000" stroke-width="0.9"/></svg>dependent point</span>
+        <span><svg aria-hidden="true" width="13" height="13" viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5" fill="#66CCEE" stroke="#000" stroke-width="0.9"/><circle cx="6.5" cy="6.5" r="2.6" fill="#fff" stroke="#000" stroke-width="0.9"/></svg>virtual midpoint</span>
+        <span><svg aria-hidden="true" width="28" height="13" viewBox="0 0 28 13"><path d="M2 6.5 L26 6.5" stroke="#BBBBBB" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="0.1 4.4"/></svg>line</span>
+      </div>
+
+      <div class="content has-text-centered-tablet ov-refs">
+        <p class="ov-ref" id="ov-ref-1">
+          [1] Kim Kiehn, Albin Ahlb&auml;ck, and Kathl&eacute;n Kohn.
+          <a href="https://openaccess.thecvf.com/content/ICCV2025/html/Kiehn_PLMP_-_Point-Line_Minimal_Problems_for_Projective_SfM_ICCV_2025_paper.html">PLMP &ndash; Point-Line Minimal Problems for Projective SfM</a>.
+          ICCV 2025, pages 8558&ndash;8567.
+        </p>
+        <p class="ov-ref" id="ov-ref-2">
+          [2] Charalambos Tzamos, Viktor Kocur, Yaqing Ding, Daniel Barath, Zuzana Berger Haladov&aacute;, Torsten Sattler,
+          and Zuzana Kukelova.
+          <a href="https://openaccess.thecvf.com/content/CVPR2025/html/Tzamos_Practical_Solutions_to_the_Relative_Pose_of_Three_Calibrated_Cameras_CVPR_2025_paper.html">Practical
+          Solutions to the Relative Pose of Three Calibrated Cameras</a>. CVPR 2025, pages 21913&ndash;21923.
+        </p>
       </div>
     </div>
   </section>
